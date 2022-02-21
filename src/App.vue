@@ -1,23 +1,68 @@
 <template>
-  <div>
-    <Forma></Forma>
-  </div>
-
+ <div class="header">
+    <a href="#/forma"
+      class="btn_head">
+      Форма
+    </a>
+    <a href="#/preview"
+        class="btn_head">
+        Превью
+    </a>
+    <router-view/>
+ </div>
 </template>
 
 <script>
-import Forma from './components/Forma.vue'
-
 
 export default {
   name: 'App',
-  components: {
-    Forma,
-    
-  }
+  components: {}
 }
+
 </script>
 
 <style>
+.header{
+        width: 95%;
+        height: 50px;
+        margin: auto;
+        padding: 5px;
+        text-align: center;
+        display: inline-block;
+    }
+    .btn_head {
+	display: inline-block;	
+	box-sizing: border-box;
+	padding: 0 20px;
+	margin: 0 15px 15px 0;
+	outline: none;
+	border: none;  
+	border-radius: 6px;
+	height: 40px;
+	line-height: 40px;
+	font-size: 17px;
+	font-weight: 600;
+	text-decoration: none;
+	color: #385898;
+	background-color: #e7f3ff;
+	cursor: pointer;
+	user-select: none;
+	appearance: none;
+	touch-action: manipulation;
+}
+.btn_head:focus-visible {
+	box-shadow: 0 0 0 2px #666;
+}
+.btn_head:hover {
+	background-color: #DBE7F2;
+}
+.btn_head:active {
+	transform: scale(0.96);
+}
+.btn_head:disabled {
+	pointer-events: none;
+	opacity: 0.65;
+}
+
 
 </style>

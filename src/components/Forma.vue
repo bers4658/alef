@@ -1,21 +1,9 @@
 <template>
-    <div class="header">
+    <div>
         <div>
-            <div 
-                class="btn_head"
-                v-on:click="hidePreview()">
-                Форма
-            </div>
-            <div
-                class="btn_head" 
-                v-on:click="hideForma()">
-                Превью
-            </div>
-        </div>  
-        <div v-if="showForma" class="content">    
             <div>
                 <h3>Персональные данные:</h3>
-            </div>  
+            </div>
             <div>
                 <input v-model="firstName.name" placeholder="Имя">
             </div>
@@ -25,58 +13,47 @@
             <div>
                 <h3>Дети (макс.5)</h3>
             </div> 
-            <div  
-                v-if="childName.length < 5 ">
-                    <div
-                        class="btn_add_child"
-                        v-on:click="addChildren()">
-                        + Добавить ребенка
-                    </div>
+            <div v-if="childName.length < 5 ">
+                <div
+                    class="btn_add_child"
+                    v-on:click="
+                     addChildren()">
+                    + Добавить ребенка
+                </div>
             </div> 
             <div v-for="childNam in childName" :key="childNam.id">
                 <input
                     v-model="childNam.name"
                     placeholder="Имя ребенка"
                 >
-                <input
-                    v-model="childNam.age"
-                    type="number"
-                    placeholder="Возраст ребенка"
-                >
-                <button class="btn_close"
+                <input v-model="childNam.age" type="number" placeholder="Возраст ребенка">
+                <button 
+                    class="btn_close"
                     v-on:click="delChildren(childName[childName.length - 1].id)">
                     x
                 </button>
             </div>
             <div class="btn_add_child">
-                <div 
-                    v-on:click="saveForm()">
+                <a
+                    href="#/preview"
+                    v-on:click="
+                    validation(),
+                    saveUserLocalStorage(),
+                    saveChildsLocalStorage()">
                     Сохранить
-                </div>
+                </a>
             </div>
-        </div>
-        <div v-if="showPreview">
-            <h3>Персональные данные:</h3>
-            <div>
-                <b>Имя:</b> {{ showFirstName[showFirstName.length - 1] }}
-            </div>
-            <div>    
-                <b>Возраст: </b>{{ showFirstAge[showFirstName.length - 1] }}
-            </div>
-            <h3>Дети:</h3>
-            <div v-for="childNam in childName" :key="childNam.id">
-                <div>
-                    {{ childNam.name }}, {{ childNam.age }} лет
-                </div>  
-            </div> 
-        </div>
+        </div>  
     </div>
 </template>
 
 <script>
-export default  {
-    name: 'Forma',
+
+export default {
+    name: "forma",
+    components: {},
     props: [],
+    
     data() {
         return {
             firstName:{
@@ -84,48 +61,19 @@ export default  {
                 age: null,  
             },
             childName:[],
-            childNameId: null,
-            showFirstName: [],
-            showFirstAge: [],
             buttonAddChild: true,
-            showPreview: false,
-            showForma: true,
         }
     },
     methods: {
-        saveForm() {
-            if(!this.validation()){
-                return
-            }
-            this.showFirstName.push(this.firstName.name)
-            this.firstName.name = ""
-            this.showFirstAge.push(this.firstName.age)
-            this.firstName.age = null  
-            this.showPreview = true
-            this.showForma = false
-            
-        },
-        addChildren(Chname, age) {
+        addChildren(chName, age) {
             let newChildName = {
-                id: this.childNameId,
-                name: Chname,
+                name: chName,
                 age: age
             }
-            this.childNameId++
             this.childName.push(newChildName) 
-            console.log(this.showFirstName);
         },
         delChildren(id) {
             this.childName.splice(id,1)
-            this.childNameId--
-        },
-        hidePreview(){
-            this.showPreview = false
-            this.showForma = true
-        },
-        hideForma() {
-            this.showPreview = true
-            this.showForma = false
         },
         validation() {
             if(!this.firstName.name){
@@ -136,15 +84,23 @@ export default  {
                 alert('Введите возраст!')
                 return false
             }
-            if(!this.childName[this.childName.length - 1].name){
-                alert('Введите имя ребенка!')
-                return false
-            }
-            if(!this.childName[this.childName.length - 1].age){
-                alert('Введите возраст ребенка!')
-                return false
-            }
+            // if(!this.childName[this.childName.length - 1].name){
+            //     alert('Введите имя ребенка!')
+            //     return false
+            // }
+            // if(!this.childName[this.childName.length - 1].age){
+            //     alert('Введите возраст ребенка!')
+            //     return false
+            // }
             return true
+        },
+        saveUserLocalStorage(){
+            let parsedName = JSON.stringify(this.firstName);
+            localStorage.setItem("firstName",parsedName)
+        },
+        saveChildsLocalStorage(){
+            let parsedChildName = JSON.stringify(this.childName);
+            localStorage.setItem("childName",parsedChildName)
         }
     }
 }
@@ -158,7 +114,6 @@ export default  {
         padding: 5px;
         text-align: center;
         display: inline-block;
-
     }
     .btn_head {
 	display: inline-block;	
@@ -232,8 +187,6 @@ export default  {
 	opacity: 0.65;
 }
 
-
-
 .btn_close{
     background-color: #FA8072 ;
 }
@@ -244,15 +197,9 @@ export default  {
     .btn{
         margin: 3px;
     }
-
     input{
         padding:5px;
         margin:5px;
-        border-radius:5px;
-        
-    }
-
-   
-    
-    
+        border-radius:5px; 
+    } 
 </style>
