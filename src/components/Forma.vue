@@ -21,7 +21,7 @@
                     + Добавить ребенка
                 </div>
             </div> 
-            <div v-for="childNam in childName" :key="childNam.id">
+            <div v-for="(childNam, index) in childName" :key="childNam.id"> 
                 <input
                     v-model="childNam.name"
                     placeholder="Имя ребенка"
@@ -29,7 +29,7 @@
                 <input v-model="childNam.age" type="number" placeholder="Возраст ребенка">
                 <button 
                     class="btn_close"
-                    v-on:click="delChildren(childName[childName.length - 1].id)">
+                    v-on:click="delChildren(index)">
                     x
                 </button>
             </div>
@@ -37,9 +37,7 @@
                 <a
                     href="#/preview"
                     v-on:click="
-                    validation(),
-                    saveUserLocalStorage(),
-                    saveChildsLocalStorage()">
+                    clickSaveButton()">
                     Сохранить
                 </a>
             </div>
@@ -67,13 +65,16 @@ export default {
     methods: {
         addChildren(chName, age) {
             let newChildName = {
+               
                 name: chName,
                 age: age
             }
             this.childName.push(newChildName) 
         },
-        delChildren(id) {
-            this.childName.splice(id,1)
+        delChildren(index) {
+            console.log(index);
+            this.childName.splice(index,1)
+            
         },
         validation() {
             if(!this.firstName.name){
@@ -101,6 +102,11 @@ export default {
         saveChildsLocalStorage(){
             let parsedChildName = JSON.stringify(this.childName);
             localStorage.setItem("childName",parsedChildName)
+        },
+        clickSaveButton(){
+            this.validation(),
+            this.saveUserLocalStorage(),
+            this.saveChildsLocalStorage()
         }
     }
 }
